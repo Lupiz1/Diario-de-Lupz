@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Diário de um Demônio</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    font-family: Georgia, 'Times New Roman', serif;
+    color: #c0392b;
+    padding: 2rem 1rem;
+    background-color: #1a0a0a;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, #3d0a0a 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, #2a0505 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, #250808 0%, transparent 70%),
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 60px,
+        rgba(80,10,10,0.04) 60px,
+        rgba(80,10,10,0.04) 61px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 60px,
+        rgba(80,10,10,0.04) 60px,
+        rgba(80,10,10,0.04) 61px
+      );
+  }
+
+  .cover {
+    max-width: 680px;
+    margin: 0 auto 3rem;
+    text-align: center;
+    padding: 3rem 2rem;
+    border: 1px solid #6b1a1a;
+    border-top: 3px solid #aa2222;
+    background:
+      radial-gradient(ellipse at 30% 20%, #2a0808 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, #1f0505 0%, transparent 60%),
+      linear-gradient(160deg, #1c0606 0%, #130303 50%, #1a0606 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(139,26,26,0.06) 28px,
+      rgba(139,26,26,0.06) 29px
+    );
+  }
+
+  .cover-symbol {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 12px #8b000088);
+    position: relative;
+  }
+
+  .cover h1 {
+    font-family: Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #cc1111;
+    letter-spacing: 0.05em;
+    text-shadow: 0 0 20px #8b000066;
+    position: relative;
+    margin-bottom: 0.4rem;
+  }
+
+  .cover .subtitle {
+    font-style: italic;
+    color: #7a2020;
+    font-size: 1rem;
+    letter-spacing: 0.15em;
+    position: relative;
+  }
+
+  .cover .divider {
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #8b1a1a, transparent);
+    margin: 1.2rem auto;
+    position: relative;
+  }
+
+  .cover .warning {
+    font-size: 0.75rem;
+    color: #5a1515;
+    font-style: italic;
+    position: relative;
+    margin-top: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .page {
+    max-width: 680px;
+    margin: 0 auto 2.5rem;
+    background:
+      radial-gradient(ellipse at 15% 15%, #1e0808 0%, transparent 55%),
+      radial-gradient(ellipse at 85% 85%, #180606 0%, transparent 55%),
+      linear-gradient(170deg, #160505 0%, #0f0202 40%, #160505 100%);
+    border: 1px solid #4a1212;
+    border-top: 3px solid #8b1a1a;
+    padding: 2.5rem 2.8rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 30px rgba(100, 0, 0, 0.15), inset 0 0 60px rgba(80,0,0,0.08);
+  }
+
+  .page::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 30px,
+      rgba(139,26,26,0.06) 30px,
+      rgba(139,26,26,0.06) 31px
+    );
+    pointer-events: none;
+  }
+
+  .page::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 52px;
+    width: 1px;
+    height: 100%;
+    background: rgba(100, 20, 20, 0.25);
+    pointer-events: none;
+  }
+
+  .page-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.6rem;
+    position: relative;
+  }
+
+  .page-num {
+    font-size: 0.7rem;
+    color: #5a1515;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    letter-spacing: 0.15em;
+    opacity: 0.7;
+    margin-top: 4px;
+    flex-shrink: 0;
+  }
+
+  .page-title-block { flex: 1; }
+
+  .folha-label {
+    font-size: 0.7rem;
+    color: #5a1515;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+  .page-title {
+    font-family: Georgia, serif;
+    font-size: 1.3rem;
+    color: #cc2222;
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow: 0 0 10px #8b000044;
+  }
+
+  .page-body {
+    font-size: 0.97rem;
+    line-height: 1.85;
+    color: #a83030;
+    font-family: Georgia, serif;
+    position: relative;
+  }
+
+  .page-body p {
+    margin-bottom: 1.1rem;
+  }
+
+  .page-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .page-body em {
+    color: #cc3333;
+    font-style: italic;
+  }
+
+  .page-body strong {
+    color: #dd2222;
+    font-weight: 700;
+  }
+
+  .scratch {
+    display: inline-block;
+    text-decoration: line-through;
+    color: #5a1515;
+    opacity: 0.6;
+  }
+
+  .margin-note {
+    float: right;
+    width: 120px;
+    margin: 0 -1.5rem 0.5rem 1rem;
+    font-size: 0.72rem;
+    color: #5a1a1a;
+    font-style: italic;
+    line-height: 1.4;
+    border-left: 1px solid #5a151522;
+    padding-left: 0.6rem;
+    clear: right;
+  }
+
+  .page-footer {
+    margin-top: 2rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #3a0a0a;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+
+  .page-footer .date-stamp {
+    font-size: 0.72rem;
+    color: #4a1010;
+    font-style: italic;
+    letter-spacing: 0.05em;
+  }
+
+  .page-footer .sig {
+    font-size: 0.9rem;
+    color: #7a1515;
+    font-style: italic;
+  }
+
+  .stain {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(100, 0, 0, 0.12);
+    pointer-events: none;
+  }
+
+  .tear {
+    position: absolute;
+    background: rgba(80,0,0,0.07);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 500px) {
+    .page { padding: 2rem 1.5rem; }
+    .cover h1 { font-size: 1.8rem; }
+    .margin-note { float: none; width: auto; margin: 0 0 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <span class="cover-symbol">🜏</span>
+  <h1>Diário de um Demônio</h1>
+  <div class="divider"></div>
+  <p class="subtitle">Propriedade de Lupz , Herdeiro da Ira</p>
+  <div class="stain" style="width:80px;height:60px;bottom:20px;right:30px;"></div>
+</div>
+
+<!-- FOLHA 1 -->
+<div class="page">
+  <div class="stain" style="width:50px;height:40px;top:30px;right:40px;"></div>
+  <div class="page-header">
+    <div class="page-num">FOLHA I</div>
+    <div class="page-title-block">
+      <span class="folha-label">Folha 1</span>
+      <h2 class="page-title">O Começo , ou o que eu consigo lembrar</h2>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <p>Não sei quem me criou. Nem sei se alguém me criou. O que eu sei é que em algum ponto, sem aviso nenhum, eu simplesmente... <em>existia</em>.</p>
+
+    <p>Era uma consciência flutuante. Sem corpo, sem olhos, sem nada. Não sentia calor, não ouvia som, não via absolutamente nada, era só <em>estar</em>. Tipo alguém ligar uma lâmpada no vácuo. A lâmpada sabe que existe, mas não tem pra onde olhar.</p>
+
+    <p>Não tenho ideia de quanto tempo fiquei assim. Pode ter sido um segundo. Pode ter sido cem milhões de anos. Não dá pra saber, não tinha relógio, não tinha dia ou noite, não tinha nada além de mim mesmo existindo no nada.</p>
+
+    <p>Depois de um tempo (esse "tempo" sendo completamente relativo), comecei a sentir calor. E foi aí que percebi que eu <em>era</em> fogo. Literalmente. Uma chama flutuante com consciência. Ainda não enxergava nada, não conseguia interagir com nada, mas sentia o calor constante que era o meu próprio corpo , e uns sons vagos de vento, como se o espaço ao redor de mim existisse mas eu ainda não tivesse acesso a ele.</p>
+
+    <p>Aí o fogo começou a se moldar. Primeiro um tronco, depois dois braços, duas pernas, uma cabeça. Asas. Uma cauda. Chifres. Quando finalmente consegui me ver, eu era um dragão. Mais especificamente: um dragão antropomórfico, bípede, com chifres e asas enormes que eu mal sabia como usar.</p>
+
+    <p>Boas-vindas ao inferno, <strong>Lupz</strong>. (Esse nome eu aprendi depois. calma.)</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="date-stamp">data desconhecida , muito cedo na minha existência</span>
+    <span class="sig">, L.</span>
+  </div>
+</div>
+
+<!-- FOLHA 2 -->
+<div class="page">
+  <div class="stain" style="width:35px;height:25px;bottom:60px;left:20px;"></div>
+  <div class="page-header">
+    <div class="page-num">FOLHA II</div>
+    <div class="page-title-block">
+      <span class="folha-label">Folha 2</span>
+      <h2 class="page-title">Deimos e a Revelação de Quem Diabos Eu Sou</h2>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="margin-note">O lugar parecia um western daqueles filmes antigos, mas versão infernal. Perturbador e familiar ao mesmo tempo.</div>
+
+    <p>Aprendi a andar antes de qualquer outra coisa. Parece básico, mas não é. Ter pernas de repente depois de ser uma nuvem de fogo não é exatamente uma transição suave.</p>
+
+    <p>O lugar onde nasci tinha dunas de areia preta que se estendiam até onde os olhos alcançavam, cavalos esqueleto pegando fogo andando por aí como se fosse completamente normal, e um céu vermelho sem sol , só uma claridade sem fonte. Bizarro. Mas ao mesmo tempo familiar, como se fosse exatamente onde eu devia estar.</p>
+
+    <p>Já tava conseguindo flutuar (muito mais fácil que andar, diga-se) quando apareceu <strong>Deimos</strong>.</p>
+
+    <p>Ele se apresentou antes mesmo de eu perguntar qualquer coisa, como se já me esperasse. Me explicou que o inferno não é aquele churrasco bagunçado que os humanos imaginam, mas uma dimensão dividida em camadas, com uma ecologia e hierarquia bem específicas.</p>
+
+    <p>Eu dei a sorte de começar na <strong>Primeira Camada</strong>. É o lado "civilizado" do buraco, um lar para pecadores que não foram ruins o suficiente para uma tortura pesada, mas que o Céu também não quis por perto. É quase um subúrbio demoníaco, até que bem tranquilo.</p>
+
+    <p>Deimos me deu o mapa do resto do abismo: a <strong>Segunda Camada</strong> é basicamente um depósito de lixo colossal, cheio de entulho e sucata demoníaca; a <strong>Terceira</strong> é onde a punição acontece de verdade pros pecadores de elite; sobre a <strong>Quarta</strong>, a gente não sabe. <strong>Quinta</strong> é o <strong>Tártaro</strong>. É lá que os anjos capturados ficam para serem torturados. Pesado.</p>
+
+    <p>Ele me contou sobre os céus e sobre o mundo dos vivos. E então disse duas coisas que mudaram tudo:</p>
+
+    <p>Meu nome: <strong>Lupz</strong>.<br>Meu cargo: <strong>Herdeiro da Ira</strong>.</p>
+
+    <p>Não vou fingir que entendi na hora porquê não entendi Porra nenhuma. Mas algo dentro de mim reconheceu aquilo como verdade , não foi aprendizado, foi reconhecimento, como lembrar de um sonho logo que você acorda.</p>
+
+    <p>Deimos também explicou que demônios precisam de almas pra sobreviver. Não é fome de verdade , não dói, não corrói , mas é uma necessidade. Sem isso a gente vai definhando. E tenho um instinto de repulsa a coisas divinas que vem de fábrica, que não aprendi e não escolhi.</p>
+
+    <p>Acabei de nascer e já vim com bagagem. Ótimo.</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="date-stamp">logo depois de aprender a andar</span>
+    <span class="sig">, L.</span>
+  </div>
+</div>
+
+<!-- FOLHA 3 -->
+<div class="page">
+  <div class="tear" style="width:180px;height:8px;top:15px;right:60px;transform:rotate(-1deg);"></div>
+  <div class="page-header">
+    <div class="page-num">FOLHA III</div>
+    <div class="page-title-block">
+      <span class="folha-label">Folha 3</span>
+      <h2 class="page-title">Descobrindo o Que Esse Corpo Consegue Fazer</h2>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <p>Passei um tempo explorando os poderes e honestamente? Tá bem acima das expectativas.</p>
+
+    <p>Fogo é o mais óbvio , sou feito de fogo, faz sentido que eu consiga moldá-lo e manipulá-lo. Mas o <em>frio</em> veio como surpresa. Consigo congelar o que eu quiser, criar gelo do nada, baixar a temperatura de um espaço inteiro se me concentrar o suficiente. Fogo e gelo no mesmo corpo. Não sei se é comum ou específico de mim, mas gostei.</p>
+
+    <p>Aí veio a coisa mais estranha: o <strong>sangue</strong>.</p>
+
+    <p>Descobri que consigo criar sangue do nada e manipulá-lo como se fosse água , tipo o personagem do Avatar que controla líquidos, mas com sangue. Visualmente perturbador, admito. O mais interessante é que esse sangue não tem tipo sanguíneo. Humanos têm A, B, O e variações. O meu não tem nenhum. O resultado é que quando entra em contato com um humano, o corpo dele entra em colapso porque não sabe o que fazer com aquele sangue desconhecido. O organismo simplesmente... para.</p>
+
+    <p>Minha contribuição mais recente foi combinar o sangue com o feitiço de frio: <em>sangue cristalizado</em>. Fica como vidro, mas vivo. Ainda tô explorando o que dá pra fazer com isso, mas as possibilidades parecem infinitas.</p>
+
+    <p>Ser recém-nascido no inferno tá sendo bem mais interessante do que eu esperava.</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="date-stamp">fase de testes , inferno, algures</span>
+    <span class="sig">, L.</span>
+  </div>
+</div>
+
+<!-- FOLHA 4 -->
+<div class="page">
+  <div class="stain" style="width:70px;height:55px;top:50px;right:25px;"></div>
+  <div class="page-header">
+    <div class="page-num">FOLHA IV</div>
+    <div class="page-title-block">
+      <span class="folha-label">Folha 4</span>
+      <h2 class="page-title">Primeira Vez no Mundo dos Humanos (e Como Quase Deu Errado)</h2>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <p>Descobri que consigo ir ao mundo dos humanos. Simplesmente... consigo. Não sei se é porque sou o Herdeiro da Ira e isso vem com regalias, ou se qualquer demônio consegue e ninguém me avisou. Ainda não tenho a resposta pra isso.</p>
+
+    <p>O primeiro lugar que apareci foi uma feira. Cheia de gente, barulhenta, com cheiros que eu nunca tinha sentido antes. Era a primeira vez que eu via humanos de perto e fiquei observando por um tempo sem interferir.</p>
+
+    <p>Tentei me comunicar com eles. Aí descobri que era invisível por padrão. Ninguém via, ninguém ouvia , eu simplesmente não existia para aquela realidade.</p>
+
+    <p>Então tive a ideia <em>brilhante</em> de ficar visível.</p>
+
+    <p>O que poderia dar errado?</p>
+
+    <p><strong>Praticamente tudo.</strong></p>
+
+    <p>Só de aparecer, sem fazer absolutamente nada, minha presença foi pesada o suficiente pra paralisar todo mundo num raio considerável. Todos os aparelhos eletrônicos por perto explodiram ao mesmo tempo , celulares, tablets, a caixa registradora da barraca, tudo. As pessoas mais corajosas (ou mais imprudentes) que estavam longe o suficiente pra não ficarem paralisadas começaram a me gravar, mas nas imagens eu aparecia como um glitch completo. Só distorção. Não dava pra ver nada.</p>
+
+    <p>E então senti. Uma presença divina se aproximando rapidamente da minha localização, como se alguém tivesse me detectado de longe.</p>
+
+    <p>Fiquei invisível de novo e saí dali o mais rápido que consegui.</p>
+
+    <p>Primeira visita ao mundo humano: tecnicamente um desastre. Mas aprendi bastante. Principalmente que a minha existência, por si só, já é demais pra esse plano aguentar.</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="date-stamp">primeira incursão , mundo dos vivos</span>
+    <span class="sig">, L.</span>
+  </div>
+</div>
+
+<!-- FOLHA 5 -->
+<div class="page">
+  <div class="tear" style="width:90px;height:6px;bottom:80px;right:30px;transform:rotate(2deg);"></div>
+  <div class="page-header">
+    <div class="page-num">FOLHA V</div>
+    <div class="page-title-block">
+      <span class="folha-label">Folha 5</span>
+      <h2 class="page-title">Os "Caçadores de Fantasmas" e o Maior Acidente da Minha Jovem Existência</h2>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <div class="margin-note">todos os espíritos do hospital me evitavam. nem os mortos queriam papo.</div>
+
+    <p>Já era noite quando encontrei o grupo. Uns quatro ou cinco humanos com câmeras, detectores de campo eletromagnético, aquelas lanternas de cabeça. Diziam entre si que faziam "exploração urbana em lugares assombrados" e que iam gravar conteúdo.</p>
+
+    <p>Decidi seguí-los por curiosidade.</p>
+
+    <p>O destino era um hospital abandonado. Grande, escuro, com aquela energia de lugar que carregou muita dor. Assim que entrei eu conseguia ver claramente os espíritos que habitavam o local , fantasmas de verdade, não a encenação que o grupo buscava. Mas todos me evitavam. Nenhum ficava perto, nenhum interagia. Só me olhavam de longe com a expressão de quem prefere não saber.</p>
+
+    <p>Trinta minutos se passaram. Os caras não encontraram absolutamente nada. Fiquei entediado esperando algum demônio aparecer pra animar o pedaço, ou pelo menos algum espírito mais corajoso.</p>
+
+    <p>Então um dos amigos deles, escondido no andar de cima, puxou uma linha amarrada num copo sobre uma mesa. O copo caiu. Todos saíram correndo e gritando como se tivessem visto a própria morte.</p>
+
+    <p>Fiquei olhando pra aquilo com um nível de decepção que eu não sabia que era capaz de sentir.</p>
+
+    <p>Voltaram uns dez minutos depois. E eu, cansado de não fazer nada, decidi mostrar como uma assombração de <em>verdade</em> funcionava.</p>
+
+    <p>Fui até a mesa. Ao invés da linha, dei um tapão no copo quando eles estavam passando.</p>
+
+    <p>O que eu esqueci é que não sou um fantasma. Sou um <strong>demônio</strong>. O Herdeiro da Ira. Não tenho a delicadeza de uma entidade sem corpo.</p>
+
+    <p>O copo saiu voando e foi parar no carro deles lá fora. A mesa inteira foi junto na mesma velocidade e acertou um dos caras no rosto , ouvi um barulho que não quero descrever. O vento gerado pelo impacto fez o hospital inteiro pegar fogo.</p>
+
+    <p>Todos saíram correndo de verdade dessa vez.</p>
+
+    <p>Fiquei parado no meio do incêndio, observando o caos, pensando que provavelmente exagerei um pouco. <em>Provavelmente.</em></p>
+
+    <p>Demônios, especialmente do meu cargo, são infinitamente mais poderosos do que qualquer assombração comum. Preciso lembrar disso antes de "brincar" de fantasma de novo.</p>
+  </div>
+
+  <div class="page-footer">
+    <span class="date-stamp">noite no mundo dos vivos , incidente do hospital</span>
+    <span class="sig">, L.</span>
+  </div>
+</div>
+
+<!-- FOLHA 6 -->
+<div class="page">
+  <div class="stain" style="width:60px;height:50px;top:40px;left:30px;opacity:0.8;"></div>
+  <div class="page-header">
+    <div class="page-num">FOLHA VI</div>
+    <div class="page-title-block">
+      <span class="folha-label">Folha 6</span>
+      <h2 class="page-title">O Arcanjo e a Vez que Quase Deixei de Existir</h2>
+    </div>
+  </div>
+
+  <div class="page-body">
+    <p>Tava caminhando numa estrada deserta tentando processar os eventos do hospital quando vi ele.</p>
+
+    <p>Um anjo. Estava distraído, olhando pro horizonte, sem me notar. Nunca tinha visto um de perto antes. A curiosidade falou mais alto que o instinto de autopreservação.</p>
+
+    <p>Foi um erro.</p>
+
+    <p>Me aproximei. Ele percebeu minha presença, se virou, e sacou uma espada antes mesmo de me ver direito. A espada era <em>translúcida</em>, quase como vidro, com uma luz interna que pulsava. Linda, honestamente. Por um segundo fiquei admirando.</p>
+
+    <p>Então ele me atacou sem hesitar. Sem falar. Sem me dar nenhuma chance de dizer qualquer coisa.</p>
+
+    <p>O golpe me acertou em cheio. Fui parar a não sei quantos metros de distância, e quando parei de me mover eu sabia que estava em apuros sérios , sentia que tava à beira de desvanecer, de <em>simplesmente deixar de existir</em>. Ele estava se preparando para o segundo golpe.</p>
+
+    <p>Não sei como, mas consegui abrir uma fenda de volta pro inferno no último segundo e me joguei dentro dela.</p>
+
+    <p>Acordei no inferno com metade da energia que eu devia ter e uma lição muito bem aprendida: <strong>anjos não são diplomáticos</strong>. Não perguntam quem você é ou o que quer. Simplesmente atacam.</p>
+
+    <p>E esse era um <em>arcanjo</em>. Não sei qual , não tive tempo de perguntar.</p>
+
+    <p>Ouvi dizer que alguns demônios já conseguiram derrotar anjos antes. Não sei se é verdade, não sei se consigo fazer o mesmo, mas sei que da próxima vez que ver um, vou estar muito mais preparado.</p>
+
+    <p><em>Da próxima vez.</em></p>
+  </div>
+
+  <div class="page-footer">
+    <span class="date-stamp">de volta ao inferno , recuperando</span>
+    <span class="sig">, L.</span>
+  </div>
+</div>
+
+</body>
+</html>
